@@ -1,5 +1,6 @@
 package com.practice.sharemate.user.service;
 
+import com.practice.sharemate.exceptions.DublicateEmailException;
 import com.practice.sharemate.user.dto.UserCreateDto;
 import com.practice.sharemate.user.dto.UserDto;
 import com.practice.sharemate.user.dto.UserUpdateDto;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
         if (updateDto.getEmail() != null && user.getEmail() != null && !updateDto.getEmail().equals(user.getEmail())) {
             if (userRepository.findByEmail(updateDto.getEmail()) != null) {
-                throw new RuntimeException("Пользователь с такой электронной почтой уже существует");
+                throw new DublicateEmailException("Пользователь с такой электронной почтой уже существует");
             }
         }
 

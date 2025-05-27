@@ -1,13 +1,12 @@
 package com.practice.sharemate.validators.validation;
 
+import com.practice.sharemate.exceptions.DublicateEmailException;
 import com.practice.sharemate.user.repository.UserRepository;
 import com.practice.sharemate.validators.annotations.UniqueEmail;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @Component
@@ -21,7 +20,6 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        log.info("huivalidation");
 
         if (email == null) {
             return true;
@@ -29,6 +27,6 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 
         if ( userRepository.findByEmail(email) == null ) {
             return true;
-        } else { throw new ResponseStatusException(HttpStatusCode.valueOf(409)); }
+        } else { throw new DublicateEmailException("Пользователь с такой электронной почтой уже существует"); }
     }
 }
